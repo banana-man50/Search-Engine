@@ -25,7 +25,7 @@ function get_details($url){
     return '{ "Title": "'.str_replace("\n", "", $title).'", "Description": "'.str_replace("\n", "", $description).'", "Keywords": "'.str_replace("\n", "", $keywords).'", "URL": "'.$url.'"}';
 }
 
-function follow_links($url){
+function follow_links($url) {
     global $already_crawled;
     global $crawling;
     global $pdo;
