@@ -60,14 +60,16 @@ function follow_links($url){
             $rows = $rows->fetchcolumn();
             $params = array(':title' => $details->Title, ':description' => $details->Description, ':keywords'=> $details->Keywords, ':url' => $details->URL, ':url_hash' => md5($details->URL));
             if ($rows > 0){
-                echo "UPDATE"."\n";
+                if (!is_null($params[':title']) && !is_null($params[':description']) && $params[':title'] != '') {
+                $result = $pdo->prepare("UPDATE `index` SET title=:title, description=:description, keywords=:keywords, url=:url, url_hash=:url_hash WHERE url_hash=:url_hash");
+                $result = $result->execute($params);
+                }
             } else {
                 if (!is_null($params[':title']) && !is_null($params[':description']) && $params[':title'] != '') {
                 $result = $pdo->prepare("INSERT INTO `index` VALUES ('',:title, :description, :keywords, :url, :url_hash)");
                 $result = $result->execute($params);
                 }
             }
-            //echo get_details($l)."\n";
         }
     }
     array_shift($crawling);
@@ -76,5 +78,4 @@ function follow_links($url){
     }
 }
 follow_links($start);
-//print_r($already_crawled);
 $pdo->query("SELECT * FROM index");
